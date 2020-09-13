@@ -68,10 +68,47 @@ inline std::array<std::string, 3> partition(const std::string& str,
 inline std::string replace(const std::string& str, const std::string& old_value,
                            const std::string& new_value, const int count = -1);
 
-inline std::vector<std::string> split( const std::string& str,
+inline int rfind(const std::string& str, const std::string& sub_str,
+                 const int start = 0, const int end = -1);
+
+inline int rindex(const std::string& str, const std::string& sub_str,
+                  const int start = 0, const int end = -1);
+
+inline std::string rjust(const std::string& str, const int length,
+                         const char character = ' ');
+
+
+inline std::array<std::string, 3> rpartition(const std::string& str,
+                                             const std::string& seperator);
+
+
+
+inline std::vector<std::string> rsplit(const std::string& str,
                                        const char delim,
                                        const int max_split = -1);
 
+
+
+inline std::string rstrip(const std::string& str, const std::string characters = " ");
+
+inline std::vector<std::string> split(const std::string& str,
+                                      const char delim,
+                                      const int max_split = -1);
+
+inline std::vector<std::string> splitlines(const std::string& str,
+                                           const bool keep_line_breaks = false);
+
+inline bool startswith(const std::string& str, const std::string& sub_str);
+
+inline std::string strip(const std::string& str, const std::string characters = " ");
+
+inline std::string swapcase(const std::string& str);
+
+// inline std::string title(const std::string& str);
+
+inline std::string upper(const std::string& str);
+
+inline std::string zfill(const std::string& str, const int length);
 }
 
 
@@ -307,6 +344,7 @@ psm::maketrans(const std::string& from, const std::string& to) {
     };
 }
 
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::array<std::string, 3> psm::partition(const std::string& str,
                                           const std::string& seperator)
 {
@@ -322,6 +360,7 @@ std::array<std::string, 3> psm::partition(const std::string& str,
     return result;
 }
 
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::string psm::replace(const std::string& str, const std::string& old_value,
                          const std::string& new_value, const int count)
 {
@@ -339,6 +378,113 @@ std::string psm::replace(const std::string& str, const std::string& old_value,
     }
     return result;
 }
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+int psm::rfind(const std::string& str, const std::string& sub_str,
+               const int start, const int end)
+{
+    int str_size = static_cast<int>(str.size());
+    int start_ = start < 0 ? 0: start;
+    int end_ = (end < 0 || end > str_size) ? str_size: end;
+
+    if(end_ <= start_ || start_ >= str_size)
+        return -1;
+
+    std::size_t found = str.rfind(sub_str, end_);
+    if (found == std::string::npos)
+        return -1;
+
+    if(found < static_cast<size_t>(start_))
+        return -1;
+
+    int result =  found;
+    return result;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+int psm::rindex(const std::string& str, const std::string& sub_str,
+                const int start, const int end)
+{
+    return psm::rfind(str, sub_str, start, end);
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::rjust(const std::string& str, const int length,
+                       const char character)
+{
+    size_t str_size = str.size();
+    if(str_size > static_cast<size_t>(length))
+        return str;
+    return std::string( length - str_size, character ) + str;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::array<std::string, 3> psm::rpartition(const std::string& str,
+                                           const std::string& seperator)
+{
+    std::array<std::string, 3> result;
+    int index = psm::rfind(str, seperator);
+    if(index == - 1){
+        result.at(2) = str;
+        return result;
+    }
+    result.at(0) = str.substr( 0, index );
+    result.at(1) = seperator;
+    result.at(2) = str.substr(index + seperator.size(), str.size());
+    return result;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::vector<std::string> psm::rsplit(const std::string& str,
+                                     const char delim,
+                                     const int max_split)
+{
+    if(max_split == 0 || delim == '\0' || str.empty())
+        return {str};
+    if(max_split < 0)
+        return psm::split(str, delim);
+
+    std::vector<std::string> chunks;
+    std::stringstream ss(str);
+    std::string chunk;
+
+    while (std::getline(ss, chunk, delim))
+        chunks.push_back(chunk);
+
+    if(chunks.size() <= static_cast<size_t>(max_split))
+        return chunks;
+
+    size_t first_chunks_size = 0;
+    for(size_t j = 0; j < chunks.size() - max_split; j++)
+        first_chunks_size += chunks.at(j).size() + 1;
+
+    std::vector<std::string> new_chunks;
+    new_chunks.push_back(str.substr(0, first_chunks_size - 1));
+    for(int j = chunks.size() - max_split; j < static_cast<int>(chunks.size()); j++)
+        new_chunks.push_back(chunks.at(j));
+
+    return new_chunks;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::rstrip(const std::string& str, const std::string characters)
+{
+    if(str.empty() || characters.empty())
+        return str;
+    int index = str.size() - 1;
+
+    for(int i = str.size() - 1; i >= 0; i--){
+        bool break_loop = true;
+        for(auto character: characters)
+            if(str.at(i) == character)
+                break_loop = false;
+        if(break_loop)
+            break;
+        index--;
+    }
+    return str.substr(0, index + 1);
+}
+
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::vector<std::string> psm::split(const std::string& str,
                                     const char delim,
@@ -367,4 +513,85 @@ std::vector<std::string> psm::split(const std::string& str,
     chunks.push_back(str.substr(chunks_size, str.size() - chunks_size));
 
     return chunks;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::vector<std::string> psm::splitlines(const std::string& str,
+                                         const bool keep_line_breaks)
+{
+    std::vector<std::string> n_lines = psm::split(str, '\n');
+    std::vector<std::string> result;
+    std::string r_linebreak = keep_line_breaks? "\r": "";
+    std::string n_linebreak = keep_line_breaks? "\n": "";
+
+    for(auto& n_line: n_lines){
+        if(n_line.empty()){
+            result.push_back(n_linebreak);
+            continue;
+        }
+        std::vector<std::string> r_lines = psm::split(n_line, '\r');
+        for(auto& r_line: r_lines){
+            result.push_back(r_line + r_linebreak);
+        }
+        if(psm::endswith(n_line, "\r") && keep_line_breaks)
+            result.back().pop_back();
+        result.back() += n_linebreak;
+    }
+    if(psm::endswith(result.back(), "\n") && keep_line_breaks)
+        result.back().pop_back();
+    return result;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+bool psm::startswith(const std::string& str, const std::string& sub_str)
+{
+    if (str.length() >= sub_str.length()) {
+        return (0 == str.compare (0, sub_str.length(), sub_str));
+    }
+    return false;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::strip(const std::string& str, const std::string characters)
+{
+    return psm::rstrip(psm::lstrip(str, characters), characters);
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::swapcase(const std::string& str)
+{
+    std::string result;
+    for(auto c: str){
+        if (std::isupper(c))
+            result += std::tolower(c);
+        else
+            result += std::toupper(c);
+    }
+    return result;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::upper(const std::string& str)
+{
+    return psm::capitalize(str);
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::zfill(const std::string& str, const int length)
+{
+    int size = static_cast<int>(str.size());
+    if (size >= length)
+        return str;
+
+
+    std::string result = str;
+    int fill = length - size;
+    result = std::string( fill, '0' ) + result;
+
+    if (result[fill] == '+' || result[fill] == '-'){
+        result[0] = result[fill];
+        result[fill] = '0';
+    }
+
+    return result;
 }
