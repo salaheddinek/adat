@@ -20,6 +20,8 @@ inline std::string center(const std::string& str, const int length);
 inline int count(const std::string& str, const std::string& sub_str,
                  const int start = 0, const int end = -1);
 
+inline std::vector<std::string> delempty(const std::vector<std::string>& str_v); // delete empty cells
+
 inline bool endswith(const std::string& str, const std::string& sub_str);
 
 inline std::string expandtabs(const std::string& str, const int tabsize = 8);
@@ -169,6 +171,16 @@ int psm::count(const std::string& str,
     }
 
     return num_matches;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::vector<std::string> psm::delempty(const std::vector<std::string>& str_v)
+{
+    std::vector<std::string> result;
+    for(auto str: str_v)
+        if(!str.empty())
+            result.push_back(str);
+    return result;
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
