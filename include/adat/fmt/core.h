@@ -8,6 +8,10 @@
 #ifndef FMT_CORE_H_
 #define FMT_CORE_H_
 
+#ifdef EXTEND_THIRDPARTY_HPP
+#   define FMT_HEADER_ONLY
+#endif
+
 #include <cstdio>  // std::FILE
 #include <cstring>
 #include <functional>

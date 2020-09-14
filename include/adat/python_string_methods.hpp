@@ -11,105 +11,139 @@
 // c++ 11 minimum
 namespace psm {
 
+/// Converts the first character to upper case
 inline std::string capitalize(const std::string& str);
 
+/// Converts string into lower case
 inline std::string casefold(const std::string& str);
 
+/// Returns a centered string
 inline std::string center(const std::string& str, const int length);
 
+/// Returns the number of times a specified value occurs in a string
 inline int count(const std::string& str, const std::string& sub_str,
                  const int start = 0, const int end = -1);
 
-inline std::vector<std::string> delempty(const std::vector<std::string>& str_v); // delete empty cells
+/// Delete cells with empty strings: ""
+inline std::vector<std::string> delempty(const std::vector<std::string>& str_v);
 
+/// Returns true if the string ends with the specified value
 inline bool endswith(const std::string& str, const std::string& sub_str);
 
+/// Sets the tab '\\t' size of the string
 inline std::string expandtabs(const std::string& str, const int tabsize = 8);
 
+/// Searches the string for a specified value and returns the position of where it was found (-1 if not found)
 inline int find(const std::string& str, const std::string& sub_str,
                 const int start = 0, const int end = -1);
 
+/// Searches the string for a specified value and returns the position of where it was found
 inline int index(const std::string& str, const std::string& sub_str,
                  const int start = 0, const int end = -1);
 
+/// Returns True if all characters in the string are alphanumeric
 inline bool isalnum(const std::string& str);
 
+/// Returns True if all characters in the string are in the alphabet
 inline bool isalpha(const std::string& str);
 
+/// Returns True if all characters in the string are digits
 inline bool isdigit(const std::string& str);
 
-//inline bool isidentifier(const std::string& str);
+/// Returns True if the string is an identifier ( (a-z) or (A-Z) or (0-9) or  (_) )
+inline bool isidentifier(const std::string& str);
 
+/// Returns True if all characters in the string are lower case
 inline bool islower(const std::string& str);
 
+/// Returns True if all characters in the string are printable
 inline bool isprintable(const std::string& str);
 
+/// Returns True if all characters in the string are whitespaces
 inline bool isspace(const std::string& str);
 
-//inline bool istitle(const std::string& str);
+/// Returns True if the string follows the rules of a title
+inline bool istitle(const std::string& str);
 
+/// Returns True if all characters in the string are upper case
 inline bool isupper(const std::string& str);
 
+/// Joins the elements of an iterable to the end of the string
 template<typename T>
 std::string join(const T& stl_container, const std::string& seperator);
 
+/// Returns a left justified version of the string
 inline std::string ljust(const std::string& str, const int length,
                          const char character = ' ');
 
+/// Converts a string into lower case
 inline std::string lower(const std::string& str);
 
 
+/// Returns a left trim version of the string
 inline std::string lstrip(const std::string& str, const std::string characters = " ");
 
+/// Returns a translation table to be used in translations
 inline std::function<std::string(std::string)>
 maketrans(const std::string& from, const std::string& to);
 
+/// Returns a array where the string is parted into three parts
 inline std::array<std::string, 3> partition(const std::string& str,
                                             const std::string& seperator);
 
+/// Returns a string where a specified value is replaced with a specified value
 inline std::string replace(const std::string& str, const std::string& old_value,
                            const std::string& new_value, const int count = -1);
 
+/// Searches the string for a specified value and returns the last position of where it was found
 inline int rfind(const std::string& str, const std::string& sub_str,
                  const int start = 0, const int end = -1);
 
+/// Searches the string for a specified value and returns the last position of where it was found
 inline int rindex(const std::string& str, const std::string& sub_str,
                   const int start = 0, const int end = -1);
 
+/// Returns a right justified version of the string
 inline std::string rjust(const std::string& str, const int length,
                          const char character = ' ');
 
-
+/// Returns a array where the string is parted into three parts
 inline std::array<std::string, 3> rpartition(const std::string& str,
                                              const std::string& seperator);
 
-
-
+/// Splits the string at the specified separator, and returns a list
 inline std::vector<std::string> rsplit(const std::string& str,
                                        const char delim,
                                        const int max_split = -1);
 
-
-
+/// Returns a right trim version of the string
 inline std::string rstrip(const std::string& str, const std::string characters = " ");
 
+/// Splits the string at the specified separator, and returns a list
 inline std::vector<std::string> split(const std::string& str,
                                       const char delim,
                                       const int max_split = -1);
 
+/// Splits the string at line breaks and returns a list
 inline std::vector<std::string> splitlines(const std::string& str,
                                            const bool keep_line_breaks = false);
 
+/// Returns true if the string starts with the specified value
 inline bool startswith(const std::string& str, const std::string& sub_str);
 
+/// Returns a trimmed version of the string
 inline std::string strip(const std::string& str, const std::string characters = " ");
 
+/// Swaps cases, lower case becomes upper case and vice versa
 inline std::string swapcase(const std::string& str);
 
-// inline std::string title(const std::string& str);
+/// Converts the first character of each word to upper case
+inline std::string title(const std::string& str);
 
+/// Converts a string into upper case
 inline std::string upper(const std::string& str);
 
+/// Fills the string with a specified number of 0 values at the beginning
 inline std::string zfill(const std::string& str, const int length);
 }
 
@@ -121,16 +155,20 @@ inline std::string zfill(const std::string& str, const int length);
 
 std::string psm::capitalize(const std::string& str)
 {
+    if(str.empty())
+        return str;
     std::string result = str;
-    std::transform(result.begin(), result.end(),result.begin(), ::toupper);
+    std::transform(result.begin(), result.begin() + 1,result.begin(), ::toupper);
     return result;
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::string psm::casefold(const std::string& str)
 {
+    if(str.empty())
+        return str;
     std::string result = str;
-    std::transform(result.begin(), result.end(),result.begin(), ::tolower);
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
     return result;
 }
 
@@ -176,6 +214,8 @@ int psm::count(const std::string& str,
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::vector<std::string> psm::delempty(const std::vector<std::string>& str_v)
 {
+    if(str_v.empty())
+        return str_v;
     std::vector<std::string> result;
     for(auto str: str_v)
         if(!str.empty())
@@ -259,6 +299,19 @@ bool psm::isdigit(const std::string& str)
     return std::all_of(str.begin(), str.end(), ::isdigit);
 }
 
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+bool psm::isidentifier(const std::string& str)
+{
+    if(str.empty())
+        return false;
+    if(std::isdigit(str.at(0)))
+        return false;
+    for(char c: str)
+        if(!std::isalnum(c) && c != '_')
+            return false;
+
+    return true;
+}
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 bool psm::islower(const std::string& str)
@@ -278,6 +331,22 @@ bool psm::isspace(const std::string& str)
     return std::all_of(str.begin(), str.end(), ::isspace);
 }
 
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+bool psm::istitle(const std::string& str)
+{
+    if(str.empty())
+        return false;
+    if(std::isalpha(str.at(0)))
+        if(psm::islower(std::string(1, str.at(0))))
+            return false;
+
+    for(size_t i = 1; i < str.size(); i++)
+        if(std::isalpha(str.at(i)))
+            if(psm::islower(std::string(1, str.at(i - 1))))
+                return false;
+
+    return true;
+}
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 bool psm::isupper(const std::string& str)
@@ -315,7 +384,11 @@ std::string psm::ljust(const std::string& str, const int length,
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 inline std::string psm::lower(const std::string& str)
 {
-    return psm::casefold(str);
+    if(str.empty())
+        return str;
+    std::string result = str;
+    std::transform(result.begin(), result.end(),result.begin(), ::tolower);
+    return result;
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
@@ -583,9 +656,44 @@ std::string psm::swapcase(const std::string& str)
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
+std::string psm::title(const std::string& str)
+{
+    if(str.empty())
+        return str;
+    std::string result;
+
+
+    std::string first_c (1, str.at(0));
+    if(std::isalpha(str.at(0)))
+        if(psm::islower(first_c))
+            first_c = psm::upper(first_c);
+    result.push_back(first_c.at(0));
+
+    for(size_t i = 1; i < str.size(); i++){
+        if(!std::isalpha(str.at(i))){
+            result.push_back(str.at(i));
+            continue;
+        }
+        std::string c (1, str.at(i));
+        if(std::isalpha(str.at(i - 1))){
+            c = psm::lower(c);
+        } else {
+            c = psm::upper(c);
+        }
+        result.push_back(c.at(0));
+    }
+
+    return result;
+}
+
+// =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
 std::string psm::upper(const std::string& str)
 {
-    return psm::capitalize(str);
+    if(str.empty())
+        return str;
+    std::string result = str;
+    std::transform(result.begin(), result.end(),result.begin(), ::toupper);
+    return result;
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
