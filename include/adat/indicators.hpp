@@ -2816,7 +2816,7 @@ public:
 
 } // namespace indicators
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 class Iteration_progress_bar : public indicators::ProgressBar {
 public:
     Iteration_progress_bar (const size_t size, const std::string prefix = ""):

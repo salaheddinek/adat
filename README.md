@@ -24,7 +24,17 @@ A set of permissive header only libraries to use as third party.
 
 ## What is this library for?
 
+The aim of this project is to make c++ development easy , fast and with fewer lines of code. For these reasons some parts of the library mimic the python built-in methods.
+
+Adat contains a set of libraries that can be used by just including the header files. Some of these were taken from other open sources projects and some were developed by us. 
+
+All the code is under permissive license so that it can be included in other project without problems (see section [Licenses](#licenses) for more details).
+
 ## How to use?
+
+No compilation is need, including the directory ```adat``` will suffice. It is also possible to extend functionnality of the code by add the definition  ```EXTEND_ADAT``` (more info about this can be found in section [Modifications](#modifications)).
+
+**PS**: Heavy use of header libraries might increase the size of the binary for **big** projects, it can also increase compile time. However, this effect is negligible in most projects. FOr this, the developer can use the compiled version found each library's github page.
 
 # Included libraries
 
@@ -33,12 +43,6 @@ A set of permissive header only libraries to use as third party.
 **{fmt}** is an open-source formatting library for C++. It can be used as a safe and fast alternative to (s)printf and iostreams.
 
 More information can be found on the main github page [https://github.com/fmtlib/fmt](https://github.com/fmtlib/fmt) or their docs page: [https://fmt.dev/7.0.3/](https://fmt.dev/7.0.3/). 
-
-In order to use fmtlib in header file only mode, the user must add```FMT_HEADER_ONLY``` definition:
-
-```
-add_definitions(-DFMT_HEADER_ONLY)
-```
 
 #### examples:
 
@@ -349,7 +353,7 @@ Outputs:
 
 Multiple timers can be used to benchmark different parts of code. Each timer activation pauses all other timers.
 
-```
+```cpp
 tfb::mini_timer read_file("file reading");
 tfb::mini_timer process_data("data processing");
 tfb::mini_timer save_file("saving to file");
@@ -427,7 +431,32 @@ Outputs:
 
 # Modifications
 
+Some modification to the cited libraries was introduced to simplify the use of code or to add a useful feature. These modification can be activated by adding the following definition before include the header file:
+
+```cppp
+#define EXTEND_ADAT
+#include <adat/cxxopts.hpp>
+```
+
+Or add the definition in the project. in cmake project it can be done by adding ```add_definitions(-DEXTEND_ADAT)```.
+
+
+In the following, we present briefly the changes made to the different libraries:
+
+* **fmtlib**: removes to need to add  ```FMT_HEADER_ONLY``` definition in order to use in header file only mode.
+	* **Nlohmann-json**: Added function to retrieve variables from json data, and a properly catching and identifying exceptions.
+	* **plog**: Added functions for easier initialization with fewer code.
+* **Cxxopts**: Added a function in order to verify the presence of required options.
+* **Indicators**: Added a child class in order to ease its integration in for loops with fewer lines of code.
+* **Tabulate**: Added a function for default tabulate with fewer lines of code.
+
+These changes are shown in details in the [modification.md](modification.md) documents.
+
+
+
 # Licenses
+
+The following table shows the license of each included library and its github page, as well as the ID of the copied master branch.
 
 | Library                     | Github Page                            | Version | License          |
 |-----------------------------|----------------------------------------|---------|------------------|
@@ -437,6 +466,6 @@ Outputs:
 | Cxxopts                     | https://github.com/jarro2783/cxxopts   | 302302b | MIT              |
 | Indicators                  | https://github.com/p-ranav/indicators  | a776a52 | MIT              |
 | Tabulate                    | https://github.com/p-ranav/tabulate    | 56b0b7a | MIT              |
-| Timers-for-benchmark (tfb)  | local                                  | _       | BSD-3-Clause     |
-| Python-string-methods (psm) | local                                  | _       | BSD-3-Clause     |
+| Timers-for-benchmark (tfb)  | locally                                | _       | BSD-3-Clause     |
+| Python-string-methods (psm) | locally                                | _       | BSD-3-Clause     |
 

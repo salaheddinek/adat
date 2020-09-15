@@ -25528,7 +25528,7 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 #undef JSON_HEDLEY_WARN_UNUSED_RESULT_MSG
 #undef JSON_HEDLEY_FALL_THROUGH
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 #include <iostream>
 template<typename T>
 bool get_value(const nlohmann::json& j, const std::string key, T& value)

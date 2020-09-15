@@ -1,15 +1,28 @@
+# Modifications
+
+This document shows the different modifications that were introduced to simplify the use of code or to add a useful feature. These modification can be activated by adding the following definition before include the header file:
+
+```cpp
+#define EXTEND_ADAT
+#include <adat/cxxopts.hpp>
+```
+
+Or add the definition in the project. in cmake project it can be done by adding ```add_definitions(-DEXTEND_ADAT)```.
+
  
 # cxxopts:
 
-```
+In cxxopts the following section was added to create ```check_for_required_options``` function in order to verify the presence of required argument:
+
+```c++
 // line 1252
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
     bool
     check_for_required_options(std::vector<std::string> required_options) const;
 #endif
 
 // line 1847
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 inline
 bool
 ParseResult::check_for_required_options(std::vector<std::string> required_options) const
@@ -31,9 +44,9 @@ ParseResult::check_for_required_options(std::vector<std::string> required_option
 #endif
 ```
 
-example
+Example of how to use this function:
 
-```
+```c++
 void parse(int argc, const char** argv)
 {
     cxxopts::Options options("simple", "A brief description");
@@ -72,6 +85,8 @@ void parse(int argc, const char** argv)
 
 
 ## Indicators
+
+Here we added a child class in order to ease Indicators integration in for loops with fewer lines of code.
 
 ```c++
 class Iteration_progress_bar : public indicators::ProgressBar {
@@ -113,9 +128,9 @@ private:
 };
 ```
 
-example
+Example of how to use this class:
 
-```
+```c++
 int main(int argc, const char** argv)
 {
     size_t size = 15;
@@ -134,7 +149,9 @@ int main(int argc, const char** argv)
 
 # tabluate
 
-```
+For tabulate library we added a child class for a default tabulate with fewer lines of code.
+
+```c++
 class Default_tabulate {
 public:
     Default_tabulate(const uint num_columns):
@@ -185,9 +202,9 @@ private:
 };
 ```
 
-example 
+Example of how to use this class:
 
-```
+```c++
     Default_tabulate table(3);
     table.add_row({"Company", "Contact", "Country"});
     table.add_row({"Alfreds Futterkiste", "Maria Anders", "Germany"});
@@ -200,9 +217,9 @@ example
     std::cout << table.str() << std::endl;
 ```
 
-example 2 
+Example of how without this class:
 
-```
+```c++
     tabulate::Table table2;
     table2.add_row({"Company", "Contact", "Country"});
     table2.add_row({"Alfreds Futterkiste", "Maria Anders", "Germany"});
@@ -220,8 +237,9 @@ example 2
 
 #  nlohmann-json 
 
+We added function to retrieve variables from json data, and a properly catching and identifying exceptions.
 
-```
+```c++
 template<typename T>
 bool get_value(const nlohmann::json& j, const std::string key, T& value)
 {
@@ -268,9 +286,9 @@ bool get_value_v(const nlohmann::json& j,
 }
 ```
 
-example
+Use case example:
 
-```
+```c++
     nlohmann::json j;
     j["pi"] = 3.141;
     j["happy"] = true;
@@ -291,11 +309,11 @@ example
 
 # plog
 
-Added to init file
+Here we extended the ini.h file with functions for easier initialization with fewer code.
 
-```
+```c++
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 #include "ColorConsoleAppender.h"
 #include "RollingFileAppender.h"
 
@@ -427,9 +445,9 @@ inline void console_logger_if_not_done_yet(
 #endif
 ```
 
-example
+The following section show how to initialize with one line of code.
 
-```
+```c++
 plog::Init::console_and_file_logger("/..path../nice.csv",
                                     plog::Severity::info,
                                     plog::Init::Formatter::severityMessage);
@@ -437,74 +455,4 @@ plog::Init::console_and_file_logger("/..path../nice.csv",
 
 LOGW << "this is a warn";
 LOGI << "this is info";
-```
-
-#  nlohmann-json 
-
-
-```
-template<typename T>
-bool get_value(const nlohmann::json& j, const std::string key, T& value)
-{
-    try {
-        value = j[key];
-    } catch (const nlohmann::json::exception& ex) {
-        std::cerr << "key = [" << key << "]: " << ex.what() << std::endl;
-        return false;
-    }
-    return true;
-}
-template<typename T>
-bool get_value_v(const nlohmann::json& j,
-                 const std::vector<std::string> key_sequence,
-                 T& value)
-{
-    auto k = key_sequence;
-    if(key_sequence.empty())
-        return false;
-    std::string key_str = "key = ['";
-    for(uint i = 0; i < k.size() - 1; i++)
-        key_str += k.at(i) + "']['";
-    key_str += k.back() + "']: ";
-    try {
-        if(k.size() == 1)
-            value = j[k.at(0)];
-        if(k.size() == 2)
-            value = j[k.at(0)][k.at(1)];
-        if(k.size() == 3)
-            value = j[k.at(0)][k.at(1)][k.at(2)];
-        if(k.size() == 4)
-            value = j[k.at(0)][k.at(1)][k.at(2)][k.at(3)];
-        if(k.size() == 5)
-            value = j[k.at(0)][k.at(1)][k.at(2)][k.at(3)][k.at(4)];
-        if(k.size() > 5){
-            std::cerr << key_str << "Too long key sequence > 5" << std::endl;
-            return false;
-        }
-    } catch (const nlohmann::json::exception& ex) {
-        std::cerr << key_str << ex.what() << std::endl;
-        return false;
-    }
-    return true;
-}
-```
-
-example
-
-```
-    nlohmann::json j;
-    j["pi"] = 3.141;
-    j["happy"] = true;
-    j["name"] = "Niels";
-    j["nothing"] = nullptr;
-    j["answer"]["everything"] = 42;
-    j["list"] = { 1, 0, 2 , 7};
-    j["object"] = { {"currency", "USD"}, {"value", 42.99} };
-
-    std::string json_data = j.dump(4);
-    std::cout << json_data << std::endl;
-
-    int test_int;
-    get_value_v(j, {"answer", "everything"}, test_int);
-    std::cout << test_int << std::endl;
 ```

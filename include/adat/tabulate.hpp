@@ -7515,7 +7515,7 @@ private:
 
 } // namespace tabulate
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 class Default_tabulate {
 public:
     Default_tabulate(const uint num_columns):

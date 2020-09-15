@@ -1247,7 +1247,7 @@ namespace cxxopts
     {
       return m_sequential;
     }
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
     bool
     check_for_required_options(std::vector<std::string> required_options) const;
 #endif
@@ -1844,7 +1844,7 @@ Options::parse(int& argc, const char**& argv)
   return result;
 }
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 inline
 bool
 ParseResult::check_for_required_options(std::vector<std::string> required_options) const

@@ -33,9 +33,9 @@
 #ifndef FMT_FORMAT_H_
 #define FMT_FORMAT_H_
 
-#ifdef EXTEND_THIRDPARTY_HPP
-#   define FMT_HEADER_ONLY
-#endif
+
+#define FMT_HEADER_ONLY
+
 
 #include <algorithm>
 #include <cerrno>

@@ -17,7 +17,7 @@ namespace plog
     }
 }
 
-#ifdef EXTEND_THIRDPARTY_HPP
+#ifdef EXTEND_ADAT
 #include "ColorConsoleAppender.h"
 #include "RollingFileAppender.h"
 
