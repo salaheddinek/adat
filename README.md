@@ -444,8 +444,8 @@ Or add the definition in the project. in cmake project it can be done by adding 
 In the following, we present briefly the changes made to the different libraries:
 
 * **fmtlib**: removes to need to add  ```FMT_HEADER_ONLY``` definition in order to use in header file only mode.
-	* **Nlohmann-json**: Added function to retrieve variables from json data, and a properly catching and identifying exceptions.
-	* **plog**: Added functions for easier initialization with fewer code.
+* **Nlohmann-json**: Added function to retrieve variables from json data, and a properly catching and identifying exceptions.
+* **plog**: Added functions for easier initialization with fewer code.
 * **Cxxopts**: Added a function in order to verify the presence of required options.
 * **Indicators**: Added a child class in order to ease its integration in for loops with fewer lines of code.
 * **Tabulate**: Added a function for default tabulate with fewer lines of code.
