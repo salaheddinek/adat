@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# for kde linux distros
+.directory
