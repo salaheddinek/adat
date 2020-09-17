@@ -131,11 +131,9 @@ public:
         return get();
     }
 
-    template <typename R>
-    R operator[](int in){
-        return static_cast<R>(m_container.at(idx_from_int(in)));
+    auto operator[](int in){
+        return m_container.at(idx_from_int(in));
     }
-
     T get()
     {
         m_info.step = m_info.step == 0 ? 1: m_info.step;
