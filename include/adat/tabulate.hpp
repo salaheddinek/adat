@@ -7518,20 +7518,20 @@ private:
 #ifdef EXTEND_ADAT
 class Default_tabulate {
 public:
-    Default_tabulate(const uint num_columns):
+    inline Default_tabulate(const uint num_columns):
         m_num_columns(num_columns)
     {
 
     }
-    void set_first_row_as_title(const bool first_row_as_title)
+    inline void set_first_row_as_title(const bool first_row_as_title)
     {
         m_first_row_as_title = first_row_as_title;
     }
-    void set_add_padding_flag(const bool add_padding)
+    inline void set_add_padding_flag(const bool add_padding)
     {
         m_add_padding = add_padding;
     }
-    void add_row(const std::vector<std::string>& row)
+    inline void add_row(const std::vector<std::string>& row)
     {
         std::vector<variant<std::string, const char *, tabulate::Table>> line;
         for(uint i = 0; i < row.size(); i++){
@@ -7549,7 +7549,7 @@ public:
 
     }
 
-    std::string str()
+    inline std::string str()
     {
         if(m_num_rows == 0)
             return "";
