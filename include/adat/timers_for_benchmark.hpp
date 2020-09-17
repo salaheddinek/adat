@@ -32,25 +32,25 @@ public:
 
 
 public:
-    Timer(const std::string clock_name = "", const bool start_now = true):
+    inline Timer(const std::string clock_name = "", const bool start_now = true):
         m_start_time(clock_t::now()),
         m_clock_name(clock_name),
         m_is_ticking(start_now)
     {}
 
-    void start();
+    inline void start();
 
-    void pause();
+    inline void pause();
 
-    std::string get_clock_name() const;
+    inline std::string get_clock_name() const;
 
-    std::chrono::milliseconds get_elapsed_time() const;
+    inline std::chrono::milliseconds get_elapsed_time() const;
 
-    std::string get_elapsed_time_as_string() const;
+    inline std::string get_elapsed_time_as_string() const;
 
-    Timer_result get_timer_result() const;
+    inline Timer_result get_timer_result() const;
 
-    std::string get_formated_elapsed_time() const;
+    inline std::string get_formated_elapsed_time() const;
 
 
 private:
@@ -68,7 +68,7 @@ struct mini_timer{
     mini_timer(const std::string name = ""):
         m_name(name) {}
 
-    std::string name() const {return m_name;}
+    inline std::string name() const {return m_name;}
     friend class Multi_timer;
 private:
     std::string m_name {""};
@@ -77,28 +77,28 @@ private:
 
 class Multi_timer{
 public:
-    Multi_timer();
+    inline Multi_timer();
 
-    Multi_timer(std::vector<mini_timer*> timers);
+    inline Multi_timer(std::vector<mini_timer*> timers);
 
-    void set_timers(std::vector<mini_timer*> timers);
+    inline void set_timers(std::vector<mini_timer*> timers);
 
-    void activate_timer(const mini_timer& timer);
+    inline void activate_timer(const mini_timer& timer);
 
-    void pause_current_timer();
+    inline void pause_current_timer();
 
-    std::vector<Timer_result> get_timers_elapsed_time() const;
+    inline std::vector<Timer_result> get_timers_elapsed_time() const;
 
-    std::string get_timers_formatted_elapsed_time() const;
+    inline std::string get_timers_formatted_elapsed_time() const;
 
 private:
     int m_current_clock_idx {-1};
     std::vector<Timer> m_clocks;
 
 private:
-    std::string center(const std::string& str, size_t& length) const;
-    std::string rjust(const std::string& str, size_t& length) const;
-    std::string ljust(const std::string& str, size_t& length) const;
+    inline std::string center(const std::string& str, size_t& length) const;
+    inline std::string rjust(const std::string& str, size_t& length) const;
+    inline std::string ljust(const std::string& str, size_t& length) const;
 
 
 };

@@ -5,10 +5,10 @@
 
 namespace scs {
 
-std::vector<size_t> indices(const size_t start,
-                            const int step,
-                            const size_t end,
-                            const bool end_defined = false)
+inline std::vector<size_t> indices(const size_t start,
+                                   const int step,
+                                   const size_t end,
+                                   const bool end_defined = false)
 {
     std::vector<size_t> indices;
     if(step == 0 || start == end)
@@ -36,16 +36,16 @@ struct Index_info {
 };
 
 struct End {
-    End(int in){
+    inline End(int in){
         info.end = in;
         info.end_defined = true;
     }
 
-    End operator-(){
+    inline End operator-(){
         info.end = - info.end;
         return *this;
     }
-    Index_info get_info() const{return info;}
+    inline Index_info get_info() const{return info;}
 
 protected:
     Index_info info;
@@ -54,22 +54,22 @@ protected:
 };
 
 struct Step{
-    Step(int in){
+    inline Step(int in){
         info.step = in;
     }
 
-    Step operator&(End e){
+    inline Step operator&(End e){
         auto old_info = e.get_info();
         info.end = old_info.end;
         info.end_defined = old_info.end_defined;
         return *this;
     }
 
-    Step operator-(){
+    inline Step operator-(){
         info.step = -info.step;
         return *this;
     }
-    Index_info get_info() const{return info;}
+    inline Index_info get_info() const{return info;}
 
 protected:
     Index_info info;
@@ -78,19 +78,19 @@ protected:
 };
 
 struct Start {
-    Start(int idx){
+    inline Start(int idx){
         info.start = idx;
         info.start_defined = true;
     }
 
-    Start operator&(End e){
+    inline Start operator&(End e){
         auto old_info = e.get_info();
         info.end = old_info.end;
         info.end_defined = old_info.end;
         return *this;
     }
 
-    Start operator&(Step s){
+    inline Start operator&(Step s){
         auto old_info = s.get_info();
         info.step = old_info.step;
         if(old_info.end_defined){
@@ -100,11 +100,11 @@ struct Start {
         return *this;
     }
 
-    Start operator-(){
+    inline Start operator-(){
         info.start = -info.start;
         return *this;
     }
-    Index_info get_info() const{return info;}
+    inline Index_info get_info() const{return info;}
 
 protected:
     Index_info info;
@@ -131,8 +131,9 @@ public:
         return get();
     }
 
-    auto operator[](int in){
-        return m_container.at(idx_from_int(in));
+    template <typename R>
+    R operator[](int in){
+        return static_cast<R>(m_container.at(idx_from_int(in)));
     }
 
     T get()
@@ -169,7 +170,7 @@ public:
     }
 
 private:
-    void print_indices_for_debug() {
+    inline void print_indices_for_debug() {
 
         std::cout << "start=" << m_info.start << ", step=" << m_info.step << ", end=" << m_info.end << "\n";
 
@@ -182,7 +183,7 @@ private:
         }
         std::cout << indices_str << "]\n";
     }
-    size_t idx_from_int(const int n) const {
+    inline size_t idx_from_int(const int n) const {
         int size = static_cast<int>(m_container.size());
         int bounded_n = n;
         bounded_n = n >= size? size - 1: bounded_n;

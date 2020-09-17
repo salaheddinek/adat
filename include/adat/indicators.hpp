@@ -2819,7 +2819,7 @@ public:
 #ifdef EXTEND_ADAT
 class Iteration_progress_bar : public indicators::ProgressBar {
 public:
-    Iteration_progress_bar (const size_t size, const std::string prefix = ""):
+    inline Iteration_progress_bar (const size_t size, const std::string prefix = ""):
         m_size(size)
     {
         std::string pre = prefix == ""? "Progress :": prefix;
@@ -2834,7 +2834,7 @@ public:
         this->set_option(iopt::ShowPercentage{true});
     }
 
-    void tick(){
+    inline void tick(){
         m_iter++;
         size_t internal_progress = static_cast<size_t>(m_iter * 100 / m_size);
         if(internal_progress == m_progress)
