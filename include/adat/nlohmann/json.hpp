@@ -25530,6 +25530,8 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 
 #ifdef EXTEND_ADAT
 #include <iostream>
+namespace nlohmann
+{
 template<typename T>
 bool get_value(const nlohmann::json& j, const std::string key, T& value)
 {
@@ -25573,6 +25575,7 @@ bool get_value_v(const nlohmann::json& j,
         return false;
     }
     return true;
+}
 }
 #endif
 

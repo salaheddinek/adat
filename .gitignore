@@ -33,3 +33,10 @@
 
 # for kde linux distros
 .directory
+
+# execluded folders
+editor/
+bin/ 
+
+# qt config file
+*.user

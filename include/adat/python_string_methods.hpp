@@ -18,7 +18,7 @@ inline std::string capitalize(const std::string& str);
 inline std::string casefold(const std::string& str);
 
 /// Returns a centered string
-inline std::string center(const std::string& str, const int length);
+inline std::string center(const std::string& str, const int length, const char filler = ' ');
 
 /// Returns the number of times a specified value occurs in a string
 inline int count(const std::string& str, const std::string& sub_str,
@@ -173,13 +173,13 @@ std::string psm::casefold(const std::string& str)
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
-std::string psm::center(const std::string& str, const int length)
+std::string psm::center(const std::string& str, const int length, const char filler)
 {
     if(static_cast<size_t>(length) <= str.size())
         return str;
-    std::string space = std::string((length - str.size()) / 2, ' ');
+    std::string space = std::string((length - str.size()) / 2, filler);
     std::string result = space + str + space;
-    return result.size() < static_cast<size_t>(length) ? result + " ": result;
+    return result.size() < static_cast<size_t>(length) ? result + filler: result;
 }
 
 // =====+=====+=====+=====+/=====+=====+=====+=====+/=====+=====+=====+=====+
