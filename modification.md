@@ -146,7 +146,6 @@ int main(int argc, const char** argv)
 
 ```
 
-
 # tabluate
 
 For tabulate library we added a child class for a default tabulate with fewer lines of code.
@@ -240,6 +239,8 @@ Example of how without this class:
 We added function to retrieve variables from json data, and a properly catching and identifying exceptions.
 
 ```c++
+namespace nlohmann
+{
 template<typename T>
 bool get_value(const nlohmann::json& j, const std::string key, T& value)
 {
@@ -284,6 +285,7 @@ bool get_value_v(const nlohmann::json& j,
     }
     return true;
 }
+}
 ```
 
 Use case example:
@@ -302,10 +304,12 @@ Use case example:
     std::cout << json_data << std::endl;
 
     int test_int;
-    get_value_v(j, {"answer", "everything"}, test_int);
+    nlohmann::get_value_v(j, {"answer", "everything"}, test_int);
     std::cout << test_int << std::endl;
 ```
 
+
+**PS:** template value T for ```get_value()``` and ```get_value_v()``` cannot be an stl container other then std::array.
 
 # plog
 
