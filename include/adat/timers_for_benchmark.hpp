@@ -30,7 +30,7 @@ public:
     using clock_t = std::chrono::high_resolution_clock;
     using milli_sec = std::chrono::milliseconds;
 
-
+    friend class Multi_timer;
 public:
     inline Timer(const std::string clock_name = "", const bool start_now = true):
         m_start_time(clock_t::now()),
@@ -64,26 +64,14 @@ private:
 
 
 // =====+=====+=====+=====+ Multi_timer class =====+=====+=====+=====+
-struct mini_timer{
-    mini_timer(const std::string name = ""):
-        m_name(name) {}
-
-    inline std::string name() const {return m_name;}
-    friend class Multi_timer;
-private:
-    std::string m_name {""};
-    int m_index {-1};
-};
 
 class Multi_timer{
 public:
     inline Multi_timer();
 
-    inline Multi_timer(std::vector<mini_timer*> timers);
+    inline void activate_timer(const std::string& timer_name);
 
-    inline void set_timers(std::vector<mini_timer*> timers);
-
-    inline void activate_timer(const mini_timer& timer);
+    inline std::vector<std::string> get_clocks_names() const;
 
     inline void pause_current_timer();
 
@@ -103,8 +91,37 @@ private:
 
 };
 
-}
 
+
+// =====+=====+=====+=====+ Multi_timer_singleton class =====+=====+=====+=====+
+template<class Dummy>
+class Multi_timer_singleton
+{
+protected:
+    inline Multi_timer_singleton()
+    { }
+
+     static Multi_timer* m_multi_timer;
+public:
+    inline Multi_timer_singleton(Multi_timer_singleton &other) = delete;
+
+    inline void operator=(const Multi_timer_singleton &) = delete;
+
+    inline static Multi_timer *get_instance()
+    {
+        if(m_multi_timer == nullptr){
+            m_multi_timer = new tfb::Multi_timer();
+        }
+        return m_multi_timer;
+    }
+
+};
+
+}
+template<class Dummy>
+tfb::Multi_timer* tfb::Multi_timer_singleton<Dummy>::m_multi_timer = nullptr;
+
+using Multi_timer_singleton = tfb::Multi_timer_singleton<void>;
 // =====+=====+=====+=====+  =====+=====+  =====+=====+=====+=====+
 // =====+=====+=====+=====+   Timer Impl   =====+=====+=====+=====+
 // =====+=====+=====+=====+  =====+=====+  =====+=====+=====+=====+
@@ -173,35 +190,35 @@ std::string tfb::Timer::get_formated_elapsed_time() const
 
 tfb::Multi_timer::Multi_timer()
 {
-
+    m_clocks.reserve(20);
 }
 
-tfb::Multi_timer::Multi_timer(std::vector<mini_timer*> timers)
-{
-    this->set_timers(timers);
-}
 
-void tfb::Multi_timer::set_timers(std::vector<mini_timer*> timers)
+void tfb::Multi_timer::activate_timer(const std::string& timer_name)
 {
-    m_clocks.clear();
-    m_current_clock_idx = -1;
-    int idx = 0;
-    for(auto& info: timers){
-        tfb::Timer stopwatch(info->m_name, false);
-        info->m_index = idx;
-        idx++;
-        m_clocks.push_back(stopwatch);
-    }
-}
-
-void tfb::Multi_timer::activate_timer(const mini_timer& timer)
-{
-    if(static_cast<size_t>(timer.m_index) >= m_clocks.size() || timer.m_index < 0)
-        return;
     if(m_current_clock_idx >= 0)
         m_clocks.at(m_current_clock_idx).pause();
-    m_clocks.at(timer.m_index).start();
-    m_current_clock_idx = timer.m_index;
+    size_t i;
+    for(i = 0; i < m_clocks.size(); i++){
+        if(m_clocks[i].m_clock_name == timer_name){
+            m_clocks.at(i).start();
+            m_current_clock_idx = static_cast<int>(i);
+            return;
+        }
+    }
+    tfb::Timer stopwatch(timer_name, true);
+    m_clocks.push_back(stopwatch);
+    m_current_clock_idx = static_cast<int>(i);
+//    m_clocks.at(m_current_clock_idx).start();
+    return;
+}
+
+std::vector<std::string> tfb::Multi_timer::get_clocks_names() const
+{
+    std::vector<std::string> clocks_names;
+    for(auto& clock: m_clocks)
+        clocks_names.push_back(clock.m_clock_name);
+    return clocks_names;
 }
 
 void tfb::Multi_timer::pause_current_timer()
@@ -234,22 +251,21 @@ tfb::Multi_timer::get_timers_elapsed_time() const
 
 }
 
-
+#include <iostream>
 std::string tfb::Multi_timer::get_timers_formatted_elapsed_time() const
 {
     std::vector<Timer_result> results = this->get_timers_elapsed_time();
-    std::string message;
+    std::string message = "";
     size_t print_name_s = 10;
     size_t print_time_s = 30;
     size_t print_percent_s = 12;
     std::chrono::milliseconds total{0};
     for(auto& r :results){
         std::string t = r.get_formatted_elapse(true);
-        print_name_s = print_name_s < r.name.size() ? r.name.size() + 2: print_name_s;
-        print_time_s = print_time_s < t.size() ? t.size() + 2: print_time_s;
+        print_name_s = print_name_s < r.name.size() + 2 ? r.name.size() + 2: print_name_s;
+        print_time_s = print_time_s < t.size() + 2 ? t.size() + 2: print_time_s;
         total += r.elapsed_time;
     }
-    message += "";
 
     std::string seperator;
 
@@ -329,5 +345,4 @@ std::string tfb::format_time(const std::chrono::milliseconds& time,
 
     return oss.str();
 }
-
 
