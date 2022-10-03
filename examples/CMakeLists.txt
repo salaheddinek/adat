@@ -22,8 +22,6 @@ add_executable(example_tabulate tabulate.cpp)
 
 add_executable(example_timers timers.cpp)
 
-add_executable(example_slicer stl_container_slicer.cpp)
-
 add_executable(example_string_methods python_string_methods.cpp)
 
 add_executable(example_cxxopts cxxopts.cpp)

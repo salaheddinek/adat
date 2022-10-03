@@ -2819,7 +2819,7 @@ public:
 #ifdef EXTEND_ADAT
 class Iteration_progress_bar : public indicators::ProgressBar {
 public:
-    inline Iteration_progress_bar (const size_t size, const std::string prefix = ""):
+    Iteration_progress_bar (const size_t size, const std::string prefix = ""):
         m_size(size)
     {
         std::string pre = prefix == ""? "Progress :": prefix;
@@ -2834,24 +2834,31 @@ public:
         this->set_option(iopt::ShowPercentage{true});
     }
 
-    inline void tick(){
+    void tick(){
         m_iter++;
-        size_t internal_progress = static_cast<size_t>(m_iter * 100 / m_size);
-        if(internal_progress == m_progress)
+        if(m_iter == 1)
             return;
+        size_t internal_progress = static_cast<size_t>(m_iter * 100 / m_size);
+//        if(internal_progress == m_progress)
+//            return;
         if(internal_progress == 100 && m_iter <= m_size - 1)
             return;
         m_progress = internal_progress;
         this->set_option(indicators::option::PostfixText{
                              std::to_string(m_iter) + "/" + std::to_string(m_size)});
         this->set_progress(m_progress);
+    }
 
-
+    void tick_mutex(){
+        m_mu.lock();
+        Iteration_progress_bar::tick();
+        m_mu.unlock();
     }
 private:
     size_t m_size {0};
     size_t m_iter {0};
     size_t m_progress {0};
+    std::mutex m_mu;
 
 };
 #endif

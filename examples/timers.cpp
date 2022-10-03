@@ -4,19 +4,17 @@
 
 
 int main(){
-    tfb::mini_timer read_file("file reading");
-    tfb::mini_timer process_data("data processing");
-    tfb::mini_timer save_file("saving to file");
-    tfb::Multi_timer multi_timer({&read_file, &process_data, &save_file});
+
+    tfb::Multi_timer multi_timer;
 
     for(size_t i = 0; i < 30; i++){
-        multi_timer.activate_timer(read_file);
+        multi_timer.activate_timer("file reading");
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-        multi_timer.activate_timer(process_data);
+        multi_timer.activate_timer("data processing");
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-        multi_timer.activate_timer(save_file);
+        multi_timer.activate_timer("saving to file");
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     }

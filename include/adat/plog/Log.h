@@ -39,15 +39,15 @@
 // Main logging macros
 
 #define PLOG_(instanceId, severity)      IF_PLOG_(instanceId, severity) (*plog::get<instanceId>()) += plog::Record(severity, PLOG_GET_FUNC(), __LINE__, PLOG_GET_FILE(), PLOG_GET_THIS(), instanceId).ref()
-#define PLOG(severity)                   PLOG_(PLOG_DEFAULT_INSTANCE_ID, severity)
+#define pPLOG(severity)                   PLOG_(PLOG_DEFAULT_INSTANCE_ID, severity)
 
-#define PLOG_VERBOSE                     PLOG(plog::verbose)
-#define PLOG_DEBUG                       PLOG(plog::debug)
-#define PLOG_INFO                        PLOG(plog::info)
-#define PLOG_WARNING                     PLOG(plog::warning)
-#define PLOG_ERROR                       PLOG(plog::error)
-#define PLOG_FATAL                       PLOG(plog::fatal)
-#define PLOG_NONE                        PLOG(plog::none)
+#define PLOG_VERBOSE                     pPLOG(plog::verbose)
+#define PLOG_DEBUG                       pPLOG(plog::debug)
+#define PLOG_INFO                        pPLOG(plog::info)
+#define PLOG_WARNING                     pPLOG(plog::warning)
+#define PLOG_ERROR                       pPLOG(plog::error)
+#define PLOG_FATAL                       pPLOG(plog::fatal)
+#define PLOG_NONE                        pPLOG(plog::none)
 
 #define PLOG_VERBOSE_(instanceId)        PLOG_(instanceId, plog::verbose)
 #define PLOG_DEBUG_(instanceId)          PLOG_(instanceId, plog::debug)
@@ -77,15 +77,15 @@
 // Conditional logging macros
 
 #define PLOG_IF_(instanceId, severity, condition)  if (!(condition)) {;} else PLOG_(instanceId, severity)
-#define PLOG_IF(severity, condition)               PLOG_IF_(PLOG_DEFAULT_INSTANCE_ID, severity, condition)
+#define PPLOG_IF(severity, condition)               PLOG_IF_(PLOG_DEFAULT_INSTANCE_ID, severity, condition)
 
-#define PLOG_VERBOSE_IF(condition)               PLOG_IF(plog::verbose, condition)
-#define PLOG_DEBUG_IF(condition)                 PLOG_IF(plog::debug, condition)
-#define PLOG_INFO_IF(condition)                  PLOG_IF(plog::info, condition)
-#define PLOG_WARNING_IF(condition)               PLOG_IF(plog::warning, condition)
-#define PLOG_ERROR_IF(condition)                 PLOG_IF(plog::error, condition)
-#define PLOG_FATAL_IF(condition)                 PLOG_IF(plog::fatal, condition)
-#define PLOG_NONE_IF(condition)                  PLOG_IF(plog::none, condition)
+#define PLOG_VERBOSE_IF(condition)               PPLOG_IF(plog::verbose, condition)
+#define PLOG_DEBUG_IF(condition)                 PPLOG_IF(plog::debug, condition)
+#define PLOG_INFO_IF(condition)                  PPLOG_IF(plog::info, condition)
+#define PLOG_WARNING_IF(condition)               PPLOG_IF(plog::warning, condition)
+#define PLOG_ERROR_IF(condition)                 PPLOG_IF(plog::error, condition)
+#define PLOG_FATAL_IF(condition)                 PPLOG_IF(plog::fatal, condition)
+#define PLOG_NONE_IF(condition)                  PPLOG_IF(plog::none, condition)
 
 #define PLOG_VERBOSE_IF_(instanceId, condition)  PLOG_IF_(instanceId, plog::verbose, condition)
 #define PLOG_DEBUG_IF_(instanceId, condition)    PLOG_IF_(instanceId, plog::debug, condition)
@@ -122,15 +122,15 @@
 // Main logging macros - can be changed later to point at macros for a different logging package
 
 #define LOG_(instanceId, severity)      IF_PLOG_(instanceId, severity) (*plog::get<instanceId>()) += plog::Record(severity, PLOG_GET_FUNC(), __LINE__, PLOG_GET_FILE(), PLOG_GET_THIS(), instanceId).ref()
-#define LOG(severity)                   PLOG_(PLOG_DEFAULT_INSTANCE_ID, severity)
+//#define LOG(severity)                   PLOG_(PLOG_DEFAULT_INSTANCE_ID, severity)
 
-#define LOG_VERBOSE                     PLOG(plog::verbose)
-#define LOG_DEBUG                       PLOG(plog::debug)
-#define LOG_INFO                        PLOG(plog::info)
-#define LOG_WARNING                     PLOG(plog::warning)
-#define LOG_ERROR                       PLOG(plog::error)
-#define LOG_FATAL                       PLOG(plog::fatal)
-#define LOG_NONE                        PLOG(plog::none)
+#define LOG_VERBOSE                     pPLOG(plog::verbose)
+#define LOG_DEBUG                       pPLOG(plog::debug)
+#define LOG_INFO                        pPLOG(plog::info)
+#define LOG_WARNING                     pPLOG(plog::warning)
+#define LOG_ERROR                       pPLOG(plog::error)
+#define LOG_FATAL                       pPLOG(plog::fatal)
+#define LOG_NONE                        pPLOG(plog::none)
 
 #define LOG_VERBOSE_(instanceId)        PLOG_(instanceId, plog::verbose)
 #define LOG_DEBUG_(instanceId)          PLOG_(instanceId, plog::debug)
@@ -160,15 +160,15 @@
 // Conditional logging macros
 
 #define LOG_IF_(instanceId, severity, condition)  if (!(condition)) {;} else PLOG_(instanceId, severity)
-#define LOG_IF(severity, condition)               PLOG_IF_(PLOG_DEFAULT_INSTANCE_ID, severity, condition)
+//#define LOG_IF(severity, condition)               PLOG_IF_(PLOG_DEFAULT_INSTANCE_ID, severity, condition)
 
-#define LOG_VERBOSE_IF(condition)               PLOG_IF(plog::verbose, condition)
-#define LOG_DEBUG_IF(condition)                 PLOG_IF(plog::debug, condition)
-#define LOG_INFO_IF(condition)                  PLOG_IF(plog::info, condition)
-#define LOG_WARNING_IF(condition)               PLOG_IF(plog::warning, condition)
-#define LOG_ERROR_IF(condition)                 PLOG_IF(plog::error, condition)
-#define LOG_FATAL_IF(condition)                 PLOG_IF(plog::fatal, condition)
-#define LOG_NONE_IF(condition)                  PLOG_IF(plog::none, condition)
+#define LOG_VERBOSE_IF(condition)               PPLOG_IF(plog::verbose, condition)
+#define LOG_DEBUG_IF(condition)                 PPLOG_IF(plog::debug, condition)
+#define LOG_INFO_IF(condition)                  PPLOG_IF(plog::info, condition)
+#define LOG_WARNING_IF(condition)               PPLOG_IF(plog::warning, condition)
+#define LOG_ERROR_IF(condition)                 PPLOG_IF(plog::error, condition)
+#define LOG_FATAL_IF(condition)                 PPLOG_IF(plog::fatal, condition)
+#define LOG_NONE_IF(condition)                  PPLOG_IF(plog::none, condition)
 
 #define LOG_VERBOSE_IF_(instanceId, condition)  PLOG_IF_(instanceId, plog::verbose, condition)
 #define LOG_DEBUG_IF_(instanceId, condition)    PLOG_IF_(instanceId, plog::debug, condition)
