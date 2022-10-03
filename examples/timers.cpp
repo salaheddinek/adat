@@ -34,6 +34,7 @@ void print_timer()
 
 int main(){
 
+
     tfb::Multi_timer multi_timer ;
 
     for(size_t i = 0; i < 10; i++){
@@ -43,6 +44,7 @@ int main(){
 
         multi_timer.activate_timer("data processing");
         std::this_thread::sleep_for(std::chrono::milliseconds(190));
+
 
         multi_timer.activate_timer("saving to file");
         std::this_thread::sleep_for(std::chrono::milliseconds(50));

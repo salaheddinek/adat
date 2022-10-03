@@ -69,7 +69,9 @@ class Multi_timer{
 public:
     inline Multi_timer();
 
-    inline void activate_timer(const std::string& timer_name);
+
+    inline void activate_timer(const std::string timer_name);
+
 
     inline std::vector<std::string> get_clocks_names() const;
 
@@ -194,7 +196,9 @@ tfb::Multi_timer::Multi_timer()
 }
 
 
-void tfb::Multi_timer::activate_timer(const std::string& timer_name)
+
+void tfb::Multi_timer::activate_timer(const std::string timer_name)
+
 {
     if(m_current_clock_idx >= 0)
         m_clocks.at(m_current_clock_idx).pause();

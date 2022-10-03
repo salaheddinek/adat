@@ -15,7 +15,6 @@ A set of permissive header only libraries to use as third party.
 	+ [Tabulate](#tabulate)
 	+ [Timers-for-benchmark](#timers_for_benchmark)
 	+ [Python-string-methods](#python_string_methods)
-	+ [Stl-container-slicer](#stl-container-slicer)
 	
 - [Modifications](#modifications)
 
@@ -146,21 +145,23 @@ Here is a minimal hello log sample:
 
 int main()
 {
-    plog::init(plog::debug, "Hello.txt"); // Step2: initialize the logger
+    tfb::Multi_timer multi_timer;
 
-    // Step3: write log messages using a special macro
-    // There are several log macros, use the macro you liked the most
+    for(size_t i = 0; i < 30; i++){
+        multi_timer.activate_timer("file reading");
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-    PLOGD << "Hello log!"; // short macro
-    PLOG_DEBUG << "Hello log!"; // long macro
-    PLOG(plog::debug) << "Hello log!"; // function-style macro
-    
-    // Also you can use LOG_XXX macro but it may clash with other logging libraries
-    LOGD << "Hello log!"; // short macro
-    LOG_DEBUG << "Hello log!"; // long macro
-    LOG(plog::debug) << "Hello log!"; // function-style macro
+        multi_timer.activate_timer("data processing");
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-    return 0;
+        multi_timer.activate_timer("saving to file");
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    }
+    multi_timer.pause_current_timer();
+
+    std::cout << multi_timer.get_timers_formatted_elapsed_time() << std::endl;
+    return (0);
 }
 ```
 
@@ -430,54 +431,6 @@ Outputs:
 6: [There, are, two, needles, in, this, haystack, with, needles.]
 ```
 
-## Stl-container-slicer (scs)
-
-The purpose of the library is to mimic python container slicing and indexing. 
-In python for example it is possible to get the values of odd indices of a list without a for loop, just by typing ```myList[1::2]```.
-
-We present here a cpp template class that can slice and stl container if it has the following methods: at(), size() and push_back(). In other words, Stl-container-slicer works with std::string, std::vector, std::deque and to name a few.
-
-C++ version 14 is required, and version 17 is preferred for class template argument deduction (CTAD).
-
-scs works by defining the start, the step and/or the end of the indices, this is illustrated in the following examples:
-
-```c++
-    std::vector<char> vec = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-    std::string str = "012345678";
-
-    std::vector<char> example1 = scs::slice(vec)[0_start & 2_step]; // equivlant to vec[0::2]
-    std::cout << fmt::format("1: result=[{}]\n", fmt::join(example1, ", "));
-
-    std::vector<char> example2 = scs::slice(vec)[-1_step];  // equivlant to vec[::-1]
-    std::cout << fmt::format("2: result=[{}]\n", fmt::join(example2, ", "));
-
-    std::vector<char> example3 = scs::slice(vec)[-1_start & 1_end & -1_step];  // equivlant to vec[-1:1:-1]
-    std::cout << fmt::format("3: result=[{}]\n", fmt::join(example3, ", "));
-
-    std::string example4 = scs::slice(str)[2_start & -2_step & -2_end]; // str[2:-2:-2]
-    std::cout << fmt::format("4: result={:s}\n", example4); // displays nothing 
-
-    std::string example5 = scs::slice(str)[-3_end]; // str[:-3]
-    std::cout << fmt::format("5: result={:s}\n", example5); 
-
-    char example6 = scs::slice(str)[-2]; // str[-2]
-    std::cout << fmt::format("6: result={}\n", example6); 
-    
-    std::string example7 = scs::slice(str).start(3).step(2).end(17).get(); // equivlant to  str[3:17:2]
-    std::cout << fmt::format("7: result={}\n", example7);
-```
-
-Outputs:
-
-```
-1: result=[a, c, e, g]
-2: result=[h, g, f, e, d, c, b, a]
-3: result=[h, g, f, e, d, c]
-4: result=   (result is an empty container)
-5: result=012345
-6: result=7
-7: result=357  (index verification is done automatically)
-```
 
 # Modifications
 
